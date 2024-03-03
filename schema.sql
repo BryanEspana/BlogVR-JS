@@ -1,0 +1,13 @@
+CREATE DATABASE IF NOT EXISTS blogvr_db;
+USE blogvr_db;
+
+-- Create a user and grant privileges
+CREATE USER IF NOT EXISTS 'bryan'@'%' IDENTIFIED BY 'bryan123';
+GRANT ALL PRIVILEGES ON blogvr_db.* TO 'bryan'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+CREATE TABLE IF NOT EXISTS blogs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL
+);
