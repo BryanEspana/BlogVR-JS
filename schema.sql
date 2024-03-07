@@ -8,6 +8,10 @@ FLUSH PRIVILEGES;
 
 CREATE TABLE IF NOT EXISTS blogs (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL
+    name_device VARCHAR(255) NOT NULL,
+    relase_date DATE NOT NULL,
+    resolution_eye VARCHAR(255) NOT NULL,
+    field_view INT NOT NULL,
+    weight DECIMAL(5, 2) NOT NULL,
+    relase_price DECIMAL(10, 2) NOT NULL 
 );
