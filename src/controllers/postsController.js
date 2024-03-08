@@ -3,27 +3,39 @@ import pool from '../dbConfig/conn.js';
 const DataPrueba = [
   {
     id: 1,
-    title: 'Post 1',
-    content: 'Contenido del post 1',
+    name_device: 'Post 1',
+    relase_date:'00-00-00',
+    field_view: '360',
+    weight:'50kg',
+    relase_price:'$1000',
+    resolution_eye: 'Contenido del post 1',
   },
   {
-    id: 2,
-    title: 'Post 2',
-    content: 'Contenido del post 2',
+    id: 1,
+    name_device: 'Post 1',
+    relase_date:'00-00-00',
+    field_view: '360',
+    weight:'50kg',
+    relase_price:'$1000',
+    resolution_eye: 'Contenido del post 1',
   },
   {
-    id: 3,
-    title: 'Post 3',
-    content: 'Contenido del post 3',
+    id: 1,
+    name_device: 'Post 1',
+    relase_date:'00-00-00',
+    field_view: '360',
+    weight:'50kg',
+    relase_price:'$1000',
+    resolution_eye: 'Contenido del post 1',
   },
 ];
 // listar todos los post
 export const getAllPosts = async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT * FROM blogs');
-
     res.status(200).json(rows);
   } catch (err) {
+    console.error('Error al crear el post:', err);
     res.status(500).json({ message: 'Error al obtener los posts', error: err });
   }
 };
@@ -41,22 +53,28 @@ export const getPostById = async (req, res) => {
 // Crear un nuevo post
 export const createPost = async (req, res) => {
   try {
-    const { title, content } = req.body;
-    await pool.query('INSERT INTO blogs (title, content) VALUES (?, ?)', [title, content]);
+    const { name_device, resolution_eye, relase_date, field_view, weight, relase_price } = req.body;
+    await pool.query('INSERT INTO blogs (name_device, resolution_eye, relase_date, field_view, weight, relase_price) VALUES (?, ?, ?, ?, ?, ?)', [name_device, resolution_eye, relase_date, field_view, weight, relase_price]);
     res.status(201).json({ message: 'Post creado' });
   } catch (err) {
-    res.status(500).json({ message: 'Error al crear el post', error: err });
+    console.error('Error al crear el post:', err);
+
+    res.status(500).json({ message: 'Error al crear el post', error: err.message });
   }
 };
 
 // Modificar un post
 export const updatePost = async (req, res) => {
   try {
-    const { title, content } = req.body;
-    await pool.query('UPDATE blogs SET title = ?, content = ? WHERE id = ?', [title, content, req.params.id]);
+    const {id, name_device, resolution_eye, relase_date, field_view, weight, relase_price } = req.body;
+    await pool.query(
+      'UPDATE blogs SET id = ?, name_device = ?, resolution_eye = ?, relase_date = ?, field_view = ?, weight = ?, relase_price = ? WHERE id = ?',
+      [name_device, resolution_eye, relase_date, field_view, weight, relase_price, req.params.id]
+    );
     res.status(200).json({ message: 'Post actualizado' });
   } catch (err) {
-    res.status(500).json({ message: 'Error al actualizar el post', error: err });
+    console.error('Error al actualizar el post:', err);
+    res.status(500).json({ message: 'Error al actualizar el post', error: err.message });
   }
 };
 
