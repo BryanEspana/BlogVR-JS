@@ -42,7 +42,16 @@ export const getPostById = async (req, res) => {
     });
   }
 };
-
+// post con imagen en base64 (funciona el metodo pero en la base de datos no se agrego imagenes)
+app.post('/postsIMG', async (req, res) => {
+  const { title, content, imageBase64 } = req.body;
+  try {
+      const newBlog = await createBlog({ title, content, imageBase64 });
+      res.status(201).json({ message: 'Blog creado exitosamente', blog: newBlog });
+  } catch (error) {
+      res.status(500).json({ message: 'Error al crear el blog', error: error.message });
+  }
+});
 
 // Crear un nuevo post
 export const createPost = async (req, res) => {
