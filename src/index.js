@@ -1,13 +1,38 @@
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
-
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import postRoutes from './routes/postRoutes.js';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const logRequests = (req, res, next) => {
+  const { method, url, body } = req;
+  const start = Date.now();
+  
+  const originalSend = res.send.bind(res);
+  res.send = (body) => {
+      const end = Date.now();
+      const duration = end - start;
+      const logMessage = `${new Date().toISOString()} - ${method} ${url} - Request Body: ${JSON.stringify(req.body)} - Response Body: ${body} - Duration: ${duration}ms\n`;
+      
+      // Escribir en el archivo log.txt
+      fs.appendFile(path.join(__dirname, 'log.txt'), logMessage, err => {
+          if (err) console.log('Error logging request:', err);
+      });
+      
+      originalSend(body);
+  };
+  
+  next();
+};
 
 
 
 const app = express();
 app.use(express.json());
+app.use(logRequests);
 app.use('/posts', postRoutes);
 
 //Implementar swagger
@@ -55,6 +80,7 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
+
 
 
 
