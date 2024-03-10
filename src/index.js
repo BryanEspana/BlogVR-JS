@@ -1,10 +1,13 @@
 import express from 'express';
+import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import postRoutes from './routes/postRoutes.js';
+
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const logRequests = (req, res, next) => {
@@ -31,6 +34,8 @@ const logRequests = (req, res, next) => {
 
 
 const app = express();
+app.use(cors());
+
 app.use(express.json());
 app.use(logRequests);
 app.use('/posts', postRoutes);
